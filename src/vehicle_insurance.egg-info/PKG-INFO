@@ -1,0 +1,7 @@
+Metadata-Version: 2.4
+Name: vehicle_insurance
+Version: 0.0.1
+Summary: An MLOps project for productionizing models
+Author: Shalha_mucha
+Author-email: Shalha Mucha <shalha.mucha@gmail.com>
+Dynamic: author
