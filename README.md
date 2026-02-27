@@ -38,7 +38,6 @@ Execute `template.py` to scaffold the initial folder structure and placeholder f
 ### Step 2 — Package Management
 Configure local package imports in `setup.py` and `pyproject.toml`.
 
-> 💡 See `crashcourse.txt` for a guide on these files.
 
 ### Step 3 — Virtual Environment & Dependencies
 
