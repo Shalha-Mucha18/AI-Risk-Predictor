@@ -1,13 +1,12 @@
 import boto3
 from  src.configuration.aws_connection import S3Client
-from io import StringIO
-from typing import Union,list
+from io import StringIO, BytesIO
+from typing import Union
 import os,sys
 from src.logger import logging
-from mypy_boto3_s3.sevice_resource import Bucket
 from src.exception import MyException
 from botocore.exceptions import ClientError
-from pandas import Dataframe, read_csv
+from pandas import DataFrame, read_csv
 import pickle
 
 class SimpleStorageService:
@@ -71,7 +70,7 @@ class SimpleStorageService:
         except Exception as e:
             raise MyException(e, sys) from e    
 
-    def get_bucket(self,bucket_name:str) -> Bucket:
+    def get_bucket(self,bucket_name:str):
         """
         Retrieves the S3 bucket object based on the provided bucket name.
         Args:
@@ -89,7 +88,7 @@ class SimpleStorageService:
         except Exception as e:
             raise MyException(e, sys) from e    
 
-    def get_file_object(self,filename:str,bucket_name:str) -> Object:
+    def get_file_object(self,filename:str,bucket_name:str):
         """
         Retrieves the file object from the specified bucket based on the filename.
         Args:
@@ -128,8 +127,8 @@ class SimpleStorageService:
             model_file = model_dir + "/" + model_name if model_dir else model_name
 
             file_object = self.get_file_object(model_file,bucket_name)
-            model_obj = self.read_object(file_object,decode=False)
-            model = pickle.load(model_obj)
+            model_obj = self.read_object(file_object, decode=False)
+            model = pickle.load(BytesIO(model_obj))
             logging.info("Prodction model loaded from s3 bucket")
             return model
         except Exception as e:
@@ -188,7 +187,7 @@ class SimpleStorageService:
         except Exception as e:
             raise MyException(e, sys) from e   
 
-    def upload_df_as_csv(self,data_frame: Dataframe,local_filename:str,bucket_filename:str,remove:bool = True):
+    def upload_df_as_csv(self,data_frame: DataFrame,local_filename:str,bucket_filename:str,remove:bool = True):
         """
         Uploads a pandas DataFrame as a CSV file to the specified S3 bucket.
         Args:
@@ -210,7 +209,7 @@ class SimpleStorageService:
         except Exception as e:
             raise MyException(e, sys) from e   
 
-    def get_df_from_object(self,object_: object) -> Dataframe:
+    def get_df_from_object(self,object_: object) -> DataFrame:
         """
         Converts an S3 object to a DataFrame.
         Args:
@@ -222,12 +221,12 @@ class SimpleStorageService:
         logging.info("Entered the get_df_from_object method")
         try: 
             content = self.read_object(object_,make_readable=True)
-            df = read_csv(content,na_values=["NA","na","nan","NaN","\N"])
+            df = read_csv(content,na_values=["NA","na","nan","NaN"])
             logging.info("Exited the get_df_from_object method")
             return df
         except Exception as e:
             raise MyException(e, sys) from e
-    def read_csv(self,filename: str, bucket_name:str) -> Dataframe:
+    def read_csv(self,filename: str, bucket_name:str) -> DataFrame:
 
         """
         Reads a CSV file from the specified S3 bucket and converts it to a DataFrame.
