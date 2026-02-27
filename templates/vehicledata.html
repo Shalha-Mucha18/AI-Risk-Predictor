@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsureIQ · AI Risk Predictor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+    <div class="bg-blur bg-blur-1"></div>
+    <div class="bg-blur bg-blur-2"></div>
+
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-icon">🚗</div>
+            <div>
+                <h1 class="header-title">InsureIQ &middot; AI Risk Predictor</h1>
+                <p class="header-sub">Predict your vehicle insurance response instantly with AI</p>
+            </div>
+        </header>
+
+        <!-- Result Banner -->
+        {% if context and context != "Rendering" %}
+        <div class="result-banner {% if context == 'Response-Yes' %}result-yes{% else %}result-no{% endif %}">
+            <span class="result-icon">{% if context == 'Response-Yes' %}✅{% else %}❌{% endif %}</span>
+            <div>
+                <p class="result-label">Prediction Result</p>
+                <p class="result-value">{{ context }}</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Main Card -->
+        <div class="card">
+            <form method="post" action="/predict">
+                <div class="section-title">Personal Details</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="Gender">Gender</label>
+                        <select id="Gender" name="Gender" required>
+                            <option value="" disabled selected>Select gender</option>
+                            <option value="1">Male</option>
+                            <option value="0">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Age">Age</label>
+                        <input type="number" id="Age" name="Age" placeholder="e.g. 35" min="18" max="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Driving_License">Driving License</label>
+                        <select id="Driving_License" name="Driving_License" required>
+                            <option value="" disabled selected>Select</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Region_Code">Region Code</label>
+                        <input type="number" step="0.01" id="Region_Code" name="Region_Code" placeholder="e.g. 28"
+                            required>
+                    </div>
+                </div>
+
+                <div class="section-title">Insurance History</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="Previously_Insured">Previously Insured</label>
+                        <select id="Previously_Insured" name="Previously_Insured" required>
+                            <option value="" disabled selected>Select</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Annual_Premium">Annual Premium (₹)</label>
+                        <input type="number" step="0.01" id="Annual_Premium" name="Annual_Premium"
+                            placeholder="e.g. 30000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Policy_Sales_Channel">Sales Channel</label>
+                        <input type="number" step="0.01" id="Policy_Sales_Channel" name="Policy_Sales_Channel"
+                            placeholder="e.g. 152" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Vintage">Vintage (days)</label>
+                        <input type="number" id="Vintage" name="Vintage" placeholder="e.g. 180" required>
+                    </div>
+                </div>
+
+                <div class="section-title">Vehicle Details</div>
+                <div class="form-grid form-grid-3">
+                    <div class="form-group">
+                        <label for="Vehicle_Age_lt_1_Year">Age &lt; 1 Year</label>
+                        <select id="Vehicle_Age_lt_1_Year" name="Vehicle_Age_lt_1_Year" required>
+                            <option value="" disabled selected>Select</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Vehicle_Age_gt_2_Years">Age &gt; 2 Years</label>
+                        <select id="Vehicle_Age_gt_2_Years" name="Vehicle_Age_gt_2_Years" required>
+                            <option value="" disabled selected>Select</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Vehicle_Damage_Yes">Vehicle Damaged?</label>
+                        <select id="Vehicle_Damage_Yes" name="Vehicle_Damage_Yes" required>
+                            <option value="" disabled selected>Select</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-predict">
+                    <span>🔍</span> Predict Insurance Response
+                </button>
+            </form>
+        </div>
+
+        <!-- Train Button -->
+        <form method="get" action="/train">
+            <button type="submit" class="btn btn-train">
+                <span>⚙️</span> Retrain Model
+            </button>
+        </form>
+
+        <p class="footer-text">Powered by Machine Learning &middot; InsureIQ Risk Prediction Engine</p>
+    </div>
+</body>
+
+</html>
